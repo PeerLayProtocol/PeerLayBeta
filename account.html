@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="PeerLay - the prediction game designed to prioritize user competition, fair rewards, and transparent gameplay. On Polygon's Blockchain" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PeerLay is the weekly prediction game with competition at its core. Predict events and win PeerLay tokens. Currently in beta testing">
     <title>PeerLay - Your Predictions</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicons/favicon.png">
+    <link rel="icon" type="image/png" href="favicons/icon.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="favicons/icon.png" sizes="180x180">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js" integrity="sha384-Htz1SE4Sl5aitpvFgr2j0sfsGUIuSXI6t8hEyrlQ93zflEF3a29bH2AvkUROUw7J" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js" integrity="sha384-Tsl3d5pUAO7a13enIvSsL3O0/95nsthPJiPto5NtLuY8w3+LbZOpr3Fl2MNmrh1E" crossorigin="anonymous"></script>
 </head>
@@ -15,8 +18,8 @@
         <nav class ="navbar">
             <a href="index.html" class="nav-logo">
                 <img src="favicons/PeerLay-logo.png" alt="PeerLay Logo" class="logo-image">
-                <h2 class="logo-text"> PeerLay</h2>
-                <p>BETA</p>
+                <h2 class="logo-text"> PeerLay</h2> 
+                <p class= "Wtext"> BETA</p>
             </a>
             <ul class ="nav-menu">
                 <button id="menu-close-button" class="menu-close-button">
@@ -24,34 +27,26 @@
                 </button>
                 <li class="nav-item">
                     <a href="index.html" class="nav-link">
+                        <img src="favicons/play-icon.png" alt="Play Icon" class="nav-icon">
                         Play
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="how-to-play.html" class="nav-link">
-                        Game Rules
+                        <img src="favicons/rules-icon.png" alt="Play Icon" class="nav-icon">
+                        Guide
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="account.html" class="nav-link">
+                        <img src="favicons/user-icon.png" alt="Play Icon" class="nav-icon">
                         Account
                     </a>
                 </li>
-                <li style="display: flex; flex-direction: column; align-items: center; position: relative;">
-                    <div class="header-icons">
-                        <a href="https://x.com/PeerLayProtocol">
-                            <img src="favicons/x-icon.png" alt="Twitter Icon" class="header-icon">
-                        </a>
-                        <a href="https://github.com/PeerLayProtocol/PeerLayBeta">
-                            <img src="favicons/github-icon.png" alt="GitHub Icon" class="header-icon">
-                        </a>
-                        <a href="https://polygonscan.com/address/0x05204aC95177CC912bfF4Dac1bd665feD83F9F7d">
-                            <img src="favicons/polygon-icon.png" alt="Polygon Icon" class="header-icon">
-                        </a>
-                    </div>
+                <li>
                     <button id="connectWallet" class="wallet-button">
                         <img src="favicons/wallet-icon.png" alt="Wallet Icon" class="wallet-icon">
-                        Connect Wallet
+                        Connect
                     </button>
                 </li>                
             </ul>
@@ -60,6 +55,12 @@
             </button>
         </nav>
     </header>
+
+    <div class="whitelist-status-container">
+        <div id="whitelistStatus" class="whitelist-status" style="display: none;">
+          <span id="statusMessage"></span>
+        </div>
+    </div>
 
     <!-- Main Content with Flex Container -->
     <div class="main-container">
@@ -72,10 +73,10 @@
                 <button class="button" onclick="showTab('redeemablePredictions')">Redeemable</button>
             </div>
             <!-- Pagination Controls for Predictions -->
-            <div id="paginationControls" class="pagination">
-                <button id="prevButton" onclick="previousPage()">Previous</button>
-                <span>Page <span id="pageNumber">1</span> of <span id="totalPages">1</span></span>
-                <button id="nextButton" onclick="nextPage()">Next</button>
+            <div id="paginationControls" class="pagination" >
+                <button id="prevButton" class="arrowButtonLeft" onclick="previousPage()" style="display: none;"></button>
+                <span style="display: none;">Page <span id="pageNumber">1</span> of <span id="totalPages">1</span></span>
+                <button id="nextButton" class="arrowButtonRight" onclick="nextPage()" style="display: none;"></button>
             </div>
 
             <!-- Consolidated Table for Predictions -->
@@ -91,30 +92,73 @@
                         </tr>
                     </thead>
                     <tbody>
-                         <div class="right-info" id="loadingIndicator" style="display: none;">
-                            <p>Loading...</p>
-                        </div>
                     </tbody>
                 </table>
-                <div class="game-info">
-                <div class="left-info">
+                <div class="tab-nav2">
                     <button onclick="redeemAllPredictions()" class="redeem-all-button">Redeem All</button>
-                </div>
-                <div class="right-info">
                     <button onclick="redeemSelectedPredictions()" class="redeem-button">Redeem Selected</button>
                 </div>
             </div>
             </div>
+            <div id = "whitelisting" class="whitelist-section" style="display: none;">
+                <p class="bottom-one">You can add one player to PeerLay's whitelist. Just enter their address here and click on "Whitelist"</p>
+                <input type="text" id="playerAddress" placeholder="Enter player address" />
+                <button onclick="whitelistPlayer()">Whitelist</button>
+            </div>
         </div>
     </div>
-    <div class="footer-text">
-        <p>
-            The website does not directly store personal data. However, third-party service providers may collect and process technical data, including IP addresses, as part of their operations.
-        </p>
-        <p>
-            For inquiries, contact us at <a href="mailto:contact@peerlay.com">peerlayprotocol@gmail.com</a>.
-        </p>
-    </div>
+    <footer class="footer">
+        <li style="display: flex; flex-direction: column; align-items: center; position: relative;">
+            <div class="header-icons">
+                <a href="https://warpcast.com/peerlay">
+                    <img src="favicons/warpcast-logo.png" alt="Warpcast Icon" class="header-icon">
+                </a>
+                <a href="https://github.com/PeerLayProtocol/PeerLayBeta">
+                    <img src="favicons/github-icon.png" alt="GitHub Icon" class="header-icon">
+                </a>
+                <a href="https://basescan.org/address/0x4e3977c1e5559c5c6387c971de4e14eB50CB526E">
+                    <img src="favicons/base-logo.png" alt="Base Icon" class="header-icon">
+                </a>
+            </div>
+        </li> 
+        <div class="inner">
+            <div class="column is-logo">
+                <a class="main-logo">
+                    <div class="logo">
+                        <img src="favicons/PeerLay-logo.png" alt="PeerLay Logo" class="logo-image">
+                    </div>
+                    <div class=".logo-image">
+                        <h2 class="logo-text"> PeerLay</h2> 
+                        <span class="copyright">© 2025. All rights reserved.</span>
+                    </div>
+                </a>
+            </div>
+            <div class="column is-nav">
+                <div class="column-title">Navigation</div>
+                <ul>
+                    <li><a href="index.html" class="Wtext">Play</a></li>
+                    <li><a href="how-to-play.html" class="Wtext">Rules of the Game</a></li>
+                    <li><a href="account.html" class="Wtext">Account Page</a></li>
+                </ul>
+            </div>
+
+            <div class="column is-nav">
+                <div class="column-title">Contact</div>
+                <ul>
+                    <li><a href="mailto:peerlayprotocol@gmail.com" class="Wtext"><i></i> peerlayprotocol@gmail.com</a></li>
+                    <li><a href="https://warpcast.com/peerlay" class="Wtext"><i></i>Warpcast</a></li>
+                </ul>
+            </div>
+
+            <div class="column is-nav">
+                <div class="column-title">Other Links</div>
+                <ul>
+                    <li><a href="https://github.com/PeerLayProtocol/PeerLayBeta" class="Wtext">GitHub</a></li>
+                    <li><a href="https://basescan.org/address/0x4e3977c1e5559c5c6387c971de4e14eB50CB526E" class="Wtext">Contract Address</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
     <div id="customAlert" class="custom-alert">
         <div class="custom-alert-content">
             <h3 id="alertMessage">This is a custom alert</h3>
@@ -124,17 +168,9 @@
     <!-- Popup Modal Structure -->
     <div id="detailsModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn">&times;</span>
+            <div class="close-btn">&times;</div>
             <p id="modalTypeText"></p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody id="eventDetailsBody"></tbody>
-            </table>
+            <div id="event-container"></div>
         </div>
     </div>
 

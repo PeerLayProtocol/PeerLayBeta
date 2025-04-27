@@ -4,10 +4,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="PeerLay - the prediction game designed to prioritize user competition, fair rewards, and transparent gameplay. On Polygon's Blockchain" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PeerLay is the weekly prediction game with competition at its core. Predict events and win PeerLay tokens. Currently in beta testing">
     <title>PeerLay - The Competitive Prediction Game</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicons/favicon.png">
+    <link rel="icon" type="image/png" href="favicons/icon.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="favicons/icon.png" sizes="180x180">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js" integrity="sha384-Htz1SE4Sl5aitpvFgr2j0sfsGUIuSXI6t8hEyrlQ93zflEF3a29bH2AvkUROUw7J" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js" integrity="sha384-Tsl3d5pUAO7a13enIvSsL3O0/95nsthPJiPto5NtLuY8w3+LbZOpr3Fl2MNmrh1E" crossorigin="anonymous"></script>
 </head>
@@ -17,8 +20,8 @@
         <nav class ="navbar">
             <a href="index.html" class="nav-logo">
                 <img src="favicons/PeerLay-logo.png" alt="PeerLay Logo" class="logo-image">
-                <h2 class="logo-text"> PeerLay</h2>
-                <p>BETA</p>
+                <h2 class="logo-text"> PeerLay</h2> 
+                <p class= "Wtext"> BETA</p>
             </a>
             <ul class ="nav-menu">
                 <button id="menu-close-button" class="menu-close-button">
@@ -26,34 +29,26 @@
                 </button>
                 <li class="nav-item">
                     <a href="index.html" class="nav-link">
+                        <img src="favicons/play-icon.png" alt="Play Icon" class="nav-icon">
                         Play
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="how-to-play.html" class="nav-link">
-                        Game Rules
+                        <img src="favicons/rules-icon.png" alt="Play Icon" class="nav-icon">
+                        Guide
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="account.html" class="nav-link">
+                        <img src="favicons/user-icon.png" alt="Play Icon" class="nav-icon">
                         Account
                     </a>
                 </li>
-                <li style="display: flex; flex-direction: column; align-items: center; position: relative;">
-                    <div class="header-icons">
-                        <a href="https://x.com/PeerLayProtocol">
-                            <img src="favicons/x-icon.png" alt="Twitter Icon" class="header-icon">
-                        </a>
-                        <a href="https://github.com/PeerLayProtocol/PeerLayBeta">
-                            <img src="favicons/github-icon.png" alt="GitHub Icon" class="header-icon">
-                        </a>
-                        <a href="https://polygonscan.com/address/0x05204aC95177CC912bfF4Dac1bd665feD83F9F7d">
-                            <img src="favicons/polygon-icon.png" alt="Polygon Icon" class="header-icon">
-                        </a>
-                    </div>
+                <li>
                     <button id="connectWallet" class="wallet-button">
                         <img src="favicons/wallet-icon.png" alt="Wallet Icon" class="wallet-icon">
-                        Connect Wallet
+                        Connect
                     </button>
                 </li>                
             </ul>
@@ -63,53 +58,95 @@
         </nav>
     </header>
 
+    <div class="whitelist-status-container">
+        <div id="whitelistStatus" class="whitelist-status" style="display: none;">
+          <span">Whitelist-only</span>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <div class="main-container">
         <div class="game-info">
-            <div class="left-info">
-                <h2><p id="gameIDDisplay">Game ID: <span id="gameIDValue">Loading...</span></p></h2>
-                <h2><p id="gamePrizeDisplay">Predictions Cast: <span id="gamePrizeValue">Loading...</span></p></h2>
+            <div id = "a" class="left-info" style="display: none;">
+                <h2><p id="gameIDDisplay">Game <span id="gameIDValue">Loading...</span></p></h2>
+                <h2><p id="gamePrizeDisplay" style="display: none;">Predictions Cast: <span id="gamePrizeValue">Loading...</span></p></h2>
             </div>
-            <div class="right-info">
-                <div id="timeDisplay"></div>
-                <label class="toggle-container">
-                    <input type="checkbox" id="togglePercentages" checked>
-                    <span class="slider"></span>
-                    <span class="toggle-text">Show Percentages</span>
-                </label>
-                <div class="right-info" id="loadingIndicator" style="display: none;">
-                    <p>Loading...</p>
-                </div>
+            <div id = "b" class="right-info" style="display: none;">
+                <div id="timeDisplay" class="timeDisplay"></div>
             </div>
-        </div>       
+        </div>
+        <div id="event-container"></div>
+        <div id="loadingBanner" class="loading-banner">
+            <img src="favicons/PeerLay-logo.png" alt="PeerLay Logo" class="rotating-logo">
+            <p>Loading...</p>
+            <p>If the process takes too long, try and connect your wallet or refresh the page</p>
+        </div>
         <table>
             <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Outcomes</th>
-                </tr>
             </thead>
-            <tbody id="topVotedEventsBody">
-                <!-- Rows will be dynamically generated here -->
-            </tbody>
-        </table>
-        <button id ="placePrediction_btn">PLACE PREDICTION</button>
-        <span id="predictionsCast">Loading...</span></p>
-    </div>
-    <div class="footer-text">
-        <p>
-            The website does not directly store personal data. However, third-party service providers may collect and process technical data, including IP addresses, as part of their operations.
-        </p>
-        <p>
-            For inquiries, contact us at <a href="mailto:contact@peerlay.com">peerlayprotocol@gmail.com</a>.
-        </p>
-    </div>    
+        </table>       
+        <button id ="placePrediction_btn" class="castPredictionButton" style="display: none;">CAST PREDICTION</button>
+    </div> 
 
     <div id="customAlert" class="custom-alert">
         <div class="custom-alert-content">
-            <h3 id="alertMessage">This is a custom alert</h3>
+            <p id="alertMessage">This is a custom alert</p>
         </div>
     </div>    
+
+
+    <footer class="footer">
+        <li style="display: flex; flex-direction: column; align-items: center; position: relative;">
+            <div class="header-icons">
+                <a href="https://warpcast.com/peerlay">
+                    <img src="favicons/warpcast-logo.png" alt="Warpcast Icon" class="header-icon">
+                </a>
+                <a href="https://github.com/PeerLayProtocol/PeerLayBeta">
+                    <img src="favicons/github-icon.png" alt="GitHub Icon" class="header-icon">
+                </a>
+                <a href="https://basescan.org/address/0x4e3977c1e5559c5c6387c971de4e14eB50CB526E">
+                    <img src="favicons/base-logo.png" alt="Base Icon" class="header-icon">
+                </a>
+            </div>
+        </li> 
+        <div class="inner">
+            <div class="column is-logo">
+                <a class="main-logo">
+                    <div class="logo">
+                        <img src="favicons/PeerLay-logo.png" alt="PeerLay Logo" class="logo-image">
+                    </div>
+                    <div class=".logo-image">
+                        <h2 class="logo-text"> PeerLay</h2> 
+                        <span class="copyright">© 2025. All rights reserved.</span>
+                    </div>
+                </a>
+            </div>
+            <div class="column is-nav">
+                <div class="column-title">Navigation</div>
+                <ul>
+                    <li><a href="index.html" class="Wtext">Play</a></li>
+                    <li><a href="how-to-play.html" class="Wtext">Rules of the Game</a></li>
+                    <li><a href="account.html" class="Wtext">Account Page</a></li>
+                </ul>
+            </div>
+
+            <div class="column is-nav">
+                <div class="column-title">Contact</div>
+                <ul>
+                    <li><a href="mailto:peerlayprotocol@gmail.com" class="Wtext"><i></i> peerlayprotocol@gmail.com</a></li>
+                    <li><a href="https://warpcast.com/peerlay" class="Wtext"><i></i>Warpcast</a></li>
+                </ul>
+            </div>
+
+            <div class="column is-nav">
+                <div class="column-title">Other Links</div>
+                <ul>
+                    <li><a href="https://github.com/PeerLayProtocol/PeerLayBeta" class="Wtext">GitHub</a></li>
+                    <li><a href="https://basescan.org/address/0x4e3977c1e5559c5c6387c971de4e14eB50CB526E" class="Wtext">Contract Address</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
 
     <!-- Include external JS script -->
     <script src="common_script.js"></script>

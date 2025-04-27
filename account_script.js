@@ -10,6 +10,9 @@ let totalPages = 1;
 let activeTabIndex = 0;
 const itemsPerPage = 5;
 let isOperationInProgress = false;
+let whitelisted = false;
+let lastWhitelisting;
+let whitelistingAvailable;
 
 // Setup function to initialize shared values
 async function initializeAccountPage() {
@@ -23,11 +26,39 @@ async function initializeAccountPage() {
         // Extract and parse game and user data
         gameID = Number(gameData[0]);
         lastGameCalculated = Number(gameData[4]);
+        whitelistingAvailable = Boolean(gameData[9]);
         userPredictions.length = Number(userData[2]);
         previousRedemptions = Number(userData[0]);
+        lastWhitelisting = Number(userData[4]);
+        whitelisted = Boolean(userData[5]);
+        const statusEl = document.getElementById('whitelistStatus');
+        const statusMessage = document.getElementById('statusMessage');
+        const connectedAccount2 = sessionStorage.getItem('connectedAccount');
+        
+        if (whitelisted === true) {
+            statusMessage.textContent = 'Whitelisted Address';
+            statusEl.style.display= "block";
+        } else if (connectedAccount2){
+            statusMessage.textContent = 'Not whitelisted';
+            statusEl.style.display= "block";
+        }
+
+        if (lastWhitelisting < gameID && whitelisted === true && whitelistingAvailable === true){
+            const whitelisting = document.getElementById('whitelisting');
+            whitelisting.style.display = "block";
+        }
 
         // Calculate total pages for pagination
         totalPages = Math.ceil(userPredictions.length / itemsPerPage);
+        if (totalPages === 0){
+            totalPages = 1;
+        }
+
+        if (totalPages > 1) {
+            document.getElementById("prevButton").style.display = "inline-block";
+            document.getElementById("nextButton").style.display = "inline-block";
+            document.querySelector("#paginationControls span").style.display = "inline";
+        }
 
         // Update the total pages display
         const totalPagesElement = document.getElementById("totalPages");
@@ -301,9 +332,10 @@ function getActionColumnContent(prediction, activeTabIndex) {
 function displayPredictions() {
     const predictionsTableBody = document.getElementById("predictionsTable").querySelector("tbody");
     predictionsTableBody.innerHTML = ""; // Clear existing rows
+    let userAccount2 = sessionStorage.getItem('connectedAccount')
 
     // Case 1: User is not connected
-    if (!userAccount) {
+    if (!userAccount2) {
         const row = document.createElement("tr");
         const cell = document.createElement("td");
         cell.colSpan = 5; // Adjust to match the total number of table columns
@@ -535,8 +567,9 @@ function openModal(modalID) {
 }
 
 function displayPopupEvents(eventsData, selectedOptions, index) {
-    const tableBody = document.getElementById('eventDetailsBody');
-    tableBody.innerHTML = ''; // Clear existing rows
+    const eventContainer = document.getElementById('event-container');
+    eventContainer.classList.add('down');
+    eventContainer.innerHTML = ''; // Clear existing events
     const modalTextElement = document.getElementById("modalTypeText");
 
     // Display score and prize
@@ -544,23 +577,33 @@ function displayPopupEvents(eventsData, selectedOptions, index) {
 
     // Populate the table with event data
     eventsData.forEach((event, eventIndex) => {
-        const row = document.createElement('tr');
+        const eventDiv = document.createElement('div');
+        eventDiv.classList.add('event-container');
 
-        // Add description cell
-        const descriptionCell = createCollapsibleCell(DOMPurify.sanitize(event.description), 100);
-        row.appendChild(descriptionCell);
+        const eventContentDiv = document.createElement('div');
+        eventContentDiv.classList.add('event-content');
 
-        // Add outcomes cell
-        const outcomesCell = createOutcomesCell(
+        const descriptionDiv = document.createElement('div');
+        descriptionDiv.classList.add('event-description');
+        const sanitizedDescription = DOMPurify.sanitize(event.description);
+
+        const descriptionText = document.createTextNode(sanitizedDescription);
+        descriptionDiv.appendChild(descriptionText);
+
+        eventContentDiv.appendChild(descriptionDiv);
+        eventDiv.appendChild(eventContentDiv);
+
+        const outcomesDiv = createOutcomesCell(
             {
                 ...event, 
-                options: event.options.map(option => DOMPurify.sanitize(option)) // Sanitize options here
-            }, 
+                options: event.options.map(option => DOMPurify.sanitize(option))
+            },
             selectedOptions[eventIndex]
-        );        
-        row.appendChild(outcomesCell);
+        );
+        outcomesDiv.classList.add('event-option');
+        eventDiv.appendChild(outcomesDiv);
 
-        tableBody.appendChild(row);
+        eventContainer.appendChild(eventDiv);
     });
 }
 
@@ -893,3 +936,25 @@ document.addEventListener('walletConnected', async function () {
     await loadPredictions();
     updatePaginationControls()
 });
+
+async function whitelistPlayer() {
+    const address = document.getElementById('playerAddress').value;
+    showLoading();
+    try { 
+      const alreadyWhitelisted = await contract.whitelist(address); // Assuming this is a view function
+      if (alreadyWhitelisted === true) {
+        showCustomAlert('This address is already whitelisted', 3000);
+        return;
+      } else {
+        const tx = await contract.whitelistAddressesByPLayer(address); // Calling the function properly
+        await tx.wait(); // Wait for transaction confirmation
+        const whitelisting = document.getElementById('whitelisting');
+        whitelisting.style.display = "none";
+        showCustomAlert('Address successfully whitelisted!', 3000);
+      }
+    } catch (error) {
+      console.error(error);
+      showCustomAlert('Something went wrong while whitelisting.', 3000);
+    }
+    hideLoading();
+  }  

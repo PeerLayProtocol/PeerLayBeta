@@ -1,0 +1,17 @@
+{
+    "name": "PeerLay",
+    "short_name": "PeerLay",
+    "description": "The Competitive Prediction Game",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#FFFFFF",
+    "theme_color": "#18BB98",
+    "icons": [
+      {
+        "src": "favicons/icon.png",
+        "sizes": "180x180",
+        "type": "image/png"
+      }
+    ]
+  }
+  

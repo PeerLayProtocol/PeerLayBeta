@@ -3,9 +3,11 @@ let gameID, gameStruct, gamePrize, currentTimestamp;
 let selectedOptions = []; // Define selected options variable to use when casting predictions
 let optionPercentages = Array(6).fill(null).map(() => Array(4).fill(null));
 let eventsData = [];
-const initialTimestamp = 1734289200;
+const initialTimestamp = 1745089200;
 let isOperationInProgress = false; // Prevent overlapping operations
 let lastGamePlayed, predictionsCast;
+let whitelistGame;
+let userWhitelisted;
 
 // Setup function to initialize shared values
 async function initializeGameData() {
@@ -16,7 +18,14 @@ async function initializeGameData() {
         document.getElementById('gameIDValue').textContent = gameID;
         gamePrize = Number(gameDa[6]);
         currentTimestamp = Number(gameDa[7]);
+        whitelistGame = Boolean(gameDa[8]);
 
+        if (whitelistGame === true){
+            const whitelistOnlyGame = document.getElementById('whitelistStatus');
+            whitelistOnlyGame.style.display= "block";
+
+        }
+        
         // Update the displayed game prize
         document.getElementById('gamePrizeValue').textContent = `${gamePrize}`;
 
@@ -27,7 +36,6 @@ async function initializeGameData() {
         let targetTimeStamp = initialTimestamp + ((gameID * 7) + 7) * (24 * 60 * 60);
         const remainingTime = targetTimeStamp - currentTimestamp;
         let displayElement = document.getElementById("timeDisplay");
-        hideLoading();
 
         if (remainingTime > 0) {
             // Format remaining time
@@ -40,10 +48,10 @@ async function initializeGameData() {
         } else {
             // Replace message with a button to start the new game
             displayElement.innerHTML = `
-                <button id="startNewGameButton" class="action-btn">
-                    Start the New Game
-                </button>
-            `;
+            <button id="startNewGameButton" class="action-btn align-right">
+                Start New Game
+            </button>
+        `;        
 
             // Add an event listener to the button
             const startNewGameButton = document.getElementById("startNewGameButton");
@@ -101,7 +109,6 @@ async function initializeGameData() {
 // Loading the main table for game events
 async function loadGameEvents() {
     try {
-        showLoading();
         // Fetch all event details at once
         const eventDetailsArray = await contract.getEvents(gameIndexes);
 
@@ -119,65 +126,79 @@ async function loadGameEvents() {
     }
 }
 
-
 function displayGameEvents(eventsData, optionPercentages) {
-    const tableBody = document.getElementById('topVotedEventsBody');
-    const showPercentages = document.getElementById('togglePercentages').checked;
-    tableBody.innerHTML = ''; // Clear existing rows
+    const eventContainer = document.getElementById('event-container');
+    eventContainer.innerHTML = ''; // Clear existing events
 
     eventsData.forEach((event, eventIndex) => {
-        const row = document.createElement('tr');
-        
-        // Description column with collapsibility
-        const descriptionCell = document.createElement('td');
+        // Create a container for each event
+        const eventDiv = document.createElement('div');
+        eventDiv.classList.add('event-container'); // Add a class for styling
+
+        // Create a container to hold description and options side by side
+        const eventContentDiv = document.createElement('div');
+        eventContentDiv.classList.add('event-content'); // Add a class for layout
+
+        // Description section with "Skip" option
+        const descriptionDiv = document.createElement('div');
+        descriptionDiv.classList.add('event-description');
         const sanitizedDescription = DOMPurify.sanitize(event.description);
-        descriptionCell.textContent = sanitizedDescription; // Use sanitized description
+
+        // Add "Skip" option
+        const skipOptionDiv = document.createElement('div');
+        skipOptionDiv.textContent = 'Skip event';
+        skipOptionDiv.classList.add('skip-option');
+        skipOptionDiv.dataset.eventId = eventIndex;
+        skipOptionDiv.dataset.optionIndex = 0;
+        skipOptionDiv.dataset.totalOptions = event.options.length;
+        skipOptionDiv.addEventListener('click', () => handleOptionClick(skipOptionDiv));
+
+        descriptionDiv.appendChild(skipOptionDiv);
         
-        // Apply collapsible functionality if description exceeds 200 characters
-        if (sanitizedDescription.length > 200) {
-            handleCollapsibleText(descriptionCell, 200);
-        }
-        
-        row.appendChild(descriptionCell);
+        // Add sanitized description text
+        const descriptionText = document.createTextNode(sanitizedDescription);
+        descriptionDiv.appendChild(descriptionText);
 
-        // Outcomes column with "Skip Event" and other options
-        const outcomesCell = document.createElement('td');
-        outcomesCell.classList.add('outcomes-cell');
+        eventContentDiv.appendChild(descriptionDiv);
 
-        [null, ...event.options].forEach((option, optionIndex) => {
-            const optionCell = document.createElement('div');
-            if (optionIndex === 0) {
-                optionCell.textContent = 'Skip Event';
-                optionCell.classList.add('skip-option');
-            } else {
-                const sanitizedOption = DOMPurify.sanitize(option);
-                const percentage = showPercentages && optionIndex > 0 
-                    ? ` (${optionPercentages[eventIndex]?.[optionIndex - 1] || 0}%)` 
-                    : '';
-                optionCell.textContent = `${sanitizedOption}${percentage}`;
-                optionCell.classList.add('outcome-option', 'selectable');
-            }
+        // Options section (without "Skip")
+        const optionsDiv = document.createElement('div');
+        optionsDiv.classList.add('event-options');
 
-            optionCell.dataset.eventId = eventIndex;
-            optionCell.dataset.optionIndex = optionIndex;
-            optionCell.dataset.totalOptions = event.options.length;
+        event.options.forEach((option, optionIndex) => {
+            const optionDiv = document.createElement('div');
+            optionDiv.classList.add('optionPlusPercentage');
+            const optionText = document.createElement('div');
+            const sanitizedOption = DOMPurify.sanitize(option);
+            const percentageDiv = document.createElement('div');
+            percentageDiv.classList.add('option-percentage');
+            const percentage = ` ${optionPercentages[eventIndex]?.[optionIndex] || 0}%`;
+            percentageDiv.textContent = `${percentage}`;
+            optionText.textContent = `${sanitizedOption}`;
+            optionText.classList.add('outcome-option', 'selectable');
 
-            if (event.options.length === 3) { // +1 accounts for "Skip Event" being added as null
-                outcomesCell.classList.add('three-options');
-            }
-
-            optionCell.addEventListener('click', () => handleOptionClick(optionCell));
+            optionText.dataset.eventId = eventIndex;
+            optionText.dataset.optionIndex = optionIndex + 1;
+            optionText.dataset.totalOptions = event.options.length;
 
             // Apply collapsibility to options if the text length exceeds 40 characters
-            if (option && option.length > 40) {
-                handleCollapsibleText(optionCell, 40);
+            if (option.length > 40) {
+                handleCollapsibleText(optionText, 40);
             }
 
-            outcomesCell.appendChild(optionCell);
+            optionDiv.appendChild(percentageDiv);
+            optionDiv.appendChild(optionText);
+
+            optionText.addEventListener('click', () => handleOptionClick(optionText));
+
+            optionsDiv.appendChild(optionDiv);
         });
 
-        row.appendChild(outcomesCell);
-        tableBody.appendChild(row);
+        eventContentDiv.appendChild(optionsDiv);
+        eventDiv.appendChild(eventContentDiv);
+        
+        // Add the event to the container
+        eventContainer.appendChild(eventDiv);
     });
 }
 
@@ -253,12 +274,15 @@ async function castPrediction() {
     if (!userAccount || typeof userAccount === 'undefined') {
         showCustomAlert('Please connect your wallet to cast a prediction.', 3000);
         return;
+    } else if (userWhitelisted == false && whitelistGame == true){
+        showCustomAlert('You need to be whitelisted to play this game.', 3000);
+        return;
     }
 
     isOperationInProgress = true;
 
     try {
-        showLoading();
+        showLoading1();
 
         for (let i = 0; i < selectedOptions.length; i++) {
             const selectedOptionsForEvent = selectedOptions[i];
@@ -302,17 +326,16 @@ async function castPrediction() {
         await tx.wait(); // Wait for the transaction to be mined
         console.log("Prediction cast successfully");
         predictionsCast += 1;
-        updateUserData()
 
         showCustomAlert("Prediction cast successfully! Find it in your Account section.", 3000);
 
         // Reset selection
         selectedOptions = Array.from({ length: selectedOptions.length }, () => []);
-        const optionCells = document.querySelectorAll('.outcomes-cell .selected');
+        const optionCells = document.querySelectorAll('.selected');
         optionCells.forEach(option => option.classList.remove('selected'));
     } catch (error) {
         console.error('Error casting prediction:', error);
-        showCustomAlert('Failed to cast the prediction. Check the console for more details.', 3000);
+        showCustomAlert('Failed to cast the prediction.', 3000);
     } finally {
         isOperationInProgress = false; // Release lock
         hideLoading();
@@ -330,11 +353,11 @@ document.addEventListener('contractsInitialized', async function () {
     await initializeGameData();
     await loadGameEvents();
 
-    document.getElementById('placePrediction_btn').addEventListener('click', castPrediction);
+    document.getElementById('a').style.display = 'block';
+    document.getElementById('b').style.display = 'block';
+    document.getElementById('placePrediction_btn').style.display = 'block';
 
-    document.getElementById('togglePercentages').addEventListener('change', function() {
-        displayGameEvents(eventsData, optionPercentages);
-    });
+    document.getElementById('placePrediction_btn').addEventListener('click', castPrediction);
 });
 
 function getChoiceID(selectedOptions, gameStruct) {
@@ -378,22 +401,12 @@ async function getUserNumberOfBets() {
         const userData = await contract.getUserNumberOfBets();
         lastGamePlayed = Number(userData[0]);
         predictionsCast = Number(userData[1]);
+        userWhitelisted = Boolean(userData[2]);
 
         if (lastGamePlayed !== gameID){
             predictionsCast = 0;
         }
-        updateUserData();
     } catch (error) {
         console.error('Error initializing account:', error);
-    }
-}
-
-function updateUserData() {
-    if (predictionsCast === 0){
-        document.getElementById('predictionsCast').textContent = `You have cast no predictions for this game. You still have 3 left`;
-    } else if (predictionsCast === 1 || predictionsCast === 2){
-        document.getElementById('predictionsCast').textContent = `You have cast ${predictionsCast} predictions for this game. You still have ${3 -predictionsCast} left`;
-    } else {
-        document.getElementById('predictionsCast').textContent = `You have cast all the 3 available predictions for this game. Cancel one from you Account page to cast a new one`;
     }
 }

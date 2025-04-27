@@ -5,14 +5,14 @@ let userAccount;
 let isContractsInitialized = false; // Flag to track initialization
 
 // Replace these addresses with the actual deployed contract addresses
-const contractAddress = '0x05204aC95177CC912bfF4Dac1bd665feD83F9F7d';  // Main contract
+const contractAddress = '0x4e3977c1e5559c5c6387c971de4e14eB50CB526E';  // Contract address
 
-// Target network details (Polygon Mainnet)
-const TARGET_CHAIN_ID = '0x89'; // Hexadecimal for 137 (Polygon Mainnet)
-const NETWORK_NAME = 'Polygon Mainnet';
+// Target network details (Base Mainnet)
+const TARGET_CHAIN_ID = '0x2105'; // Hexadecimal for 84531 (Base Mainnet)
+const NETWORK_NAME = 'Base Mainnet';
 
-// Fallback Polygon Node URL (Free Public Endpoint)
-const POLYGON_NODE_URL = 'https://rpc.ankr.com/polygon';  // Use a free public endpoint like from QuickNode or Moralis
+// Fallback Base Mainnet Node URL (Public Endpoint)
+const NODE_URL = 'https://mainnet.base.org'; // Use a public RPC provider for Base Mainnet
 
 // COMMON FUNCTIONS FOR ALL PAGES
 async function loadABI(file) {
@@ -38,7 +38,7 @@ async function initContracts(useFallback = false) {
     let provider, signer;
     if (useFallback || !window.ethereum) {
         console.log('Using fallback node...');
-        provider = new ethers.providers.JsonRpcProvider(POLYGON_NODE_URL);
+        provider = new ethers.providers.JsonRpcProvider(NODE_URL);
     } else {
         provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await provider.listAccounts(); // Fetch connected accounts
@@ -48,7 +48,7 @@ async function initContracts(useFallback = false) {
         } else {
             console.warn('No wallet account connected. Using fallback provider for readonly operations.');
             useFallback = true;
-            provider = new ethers.providers.JsonRpcProvider(POLYGON_NODE_URL);
+            provider = new ethers.providers.JsonRpcProvider(NODE_URL);
         }
     }
 
@@ -178,7 +178,7 @@ async function connectWallet() {
                 showCustomAlert('Failed to connect to Web3 wallet.', 3000);
             }
         } else {
-            showCustomAlert('Web3 wallet is not installed. Please install MetaMask and try again.', 3000);
+            showCustomAlert('Web3 wallet is not installed. Please install Coinbase Wallet and try again.', 3000);
         }
     }
 }
@@ -187,16 +187,27 @@ async function checkConnectedAccount() {
     const connectedAccount = sessionStorage.getItem('connectedAccount');
 
     if (connectedAccount) {
-        console.log('Connected account found:', connectedAccount);
         userAccount = connectedAccount;
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        const currentAccount = accounts[0];
+
+        if (connectedAccount !== currentAccount) {
+            console.log('Account changed, updating...');
+            sessionStorage.setItem('connectedAccount', currentAccount);
+            userAccount = currentAccount;
+        } else {
+            userAccount = connectedAccount;
+        }
 
         // Ensure contracts are initialized
         if (!isContractsInitialized) {
             await initContracts();
         }
 
+        console.log('Connected account found:', userAccount);
+
         // Shorten the connected account address
-        const shortenedAccount = `${connectedAccount.slice(0, 6)}...${connectedAccount.slice(-4)}`;
+        const shortenedAccount = `${userAccount.slice(0, 6)}...${userAccount.slice(-4)}`;
 
         // Update the button UI with the wallet icon and shortened address
         const walletButton = document.getElementById('connectWallet');
@@ -220,7 +231,7 @@ async function checkConnectedAccount() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     if (window.ethereum) {
-        console.log("Ethereum wallet detected.");
+        console.log("Ethereum-compatible wallet detected.");
 
         // Add event listener for network changes
         window.ethereum.on('chainChanged', (chainId) => {
@@ -251,7 +262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             await initContracts(true); // Use the fallback node
         }
     } else {
-        console.log("Ethereum wallet not detected. Using fallback node.");
+        console.log("Ethereum-compatible wallet not detected. Using fallback node.");
         await initContracts(true); // Use the fallback node
     }
 });
@@ -301,13 +312,37 @@ function handleCollapsibleText(element, charLimit) {
 }
 
 function showLoading() {
-    const loadingElement = document.getElementById('loadingIndicator');
-    loadingElement.style.display = 'block';
+    const logoImage = document.querySelector('.nav-logo .logo-image');
+    logoImage.classList.add('spinner');
+
+    const loadingBanner = document.getElementById('loadingBanner');
+    if (loadingBanner) {
+        loadingBanner.style.display = 'flex'; // or 'block' depending on your layout
+    }
+
+    const eventContainer = document.getElementById('event-container');
+    if (eventContainer) {
+        eventContainer.style.display = 'none'; // or 'block' depending on your layout
+    }
+}
+
+function showLoading1() {
+    const logoImage = document.querySelector('.nav-logo .logo-image');
+    logoImage.classList.add('spinner');
 }
 
 function hideLoading() {
-    const loadingElement = document.getElementById('loadingIndicator');
-    loadingElement.style.display = 'none';
+    const logoImage = document.querySelector('.nav-logo .logo-image');
+    logoImage.classList.remove('spinner');
+    const loadingBanner = document.getElementById('loadingBanner');
+    if (loadingBanner) {
+        loadingBanner.style.display = 'none'; // or 'block' depending on your layout
+    }
+
+    const eventContainer = document.getElementById('event-container');
+    if (eventContainer) {
+        eventContainer.style.display = 'block';
+    }
 }
 
 const menuOpenButton = document.querySelector("#menu-open-button");

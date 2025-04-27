@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="PeerLay - the prediction game designed to prioritize user competition, fair rewards, and transparent gameplay. On Polygon's Blockchain" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PeerLay is the weekly prediction game with competition at its core. Predict events and win PeerLay tokens. Currently in beta testing">
     <title>PeerLay - Information</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicons/favicon.png">
+    <link rel="icon" type="image/png" href="favicons/icon.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="favicons/icon.png" sizes="180x180">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js" integrity="sha384-Htz1SE4Sl5aitpvFgr2j0sfsGUIuSXI6t8hEyrlQ93zflEF3a29bH2AvkUROUw7J" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js" integrity="sha384-Tsl3d5pUAO7a13enIvSsL3O0/95nsthPJiPto5NtLuY8w3+LbZOpr3Fl2MNmrh1E" crossorigin="anonymous"></script>
 </head>
@@ -15,8 +18,8 @@
         <nav class ="navbar">
             <a href="index.html" class="nav-logo">
                 <img src="favicons/PeerLay-logo.png" alt="PeerLay Logo" class="logo-image">
-                <h2 class="logo-text"> PeerLay</h2>
-                <p>BETA</p>
+                <h2 class="logo-text"> PeerLay</h2> 
+                <p class= "Wtext"> BETA</p>
             </a>
             <ul class ="nav-menu">
                 <button id="menu-close-button" class="menu-close-button">
@@ -24,34 +27,26 @@
                 </button>
                 <li class="nav-item">
                     <a href="index.html" class="nav-link">
+                        <img src="favicons/play-icon.png" alt="Play Icon" class="nav-icon">
                         Play
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="how-to-play.html" class="nav-link">
-                        Game Rules
+                        <img src="favicons/rules-icon.png" alt="Play Icon" class="nav-icon">
+                        Guide
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="account.html" class="nav-link">
+                        <img src="favicons/user-icon.png" alt="Play Icon" class="nav-icon">
                         Account
                     </a>
                 </li>
-                <li style="display: flex; flex-direction: column; align-items: center; position: relative;">
-                    <div class="header-icons">
-                        <a href="https://x.com/PeerLayProtocol">
-                            <img src="favicons/x-icon.png" alt="Twitter Icon" class="header-icon">
-                        </a>
-                        <a href="https://github.com/PeerLayProtocol/PeerLayBeta">
-                            <img src="favicons/github-icon.png" alt="GitHub Icon" class="header-icon">
-                        </a>
-                        <a href="https://polygonscan.com/address/0x05204aC95177CC912bfF4Dac1bd665feD83F9F7d">
-                            <img src="favicons/polygon-icon.png" alt="Polygon Icon" class="header-icon">
-                        </a>
-                    </div>
+                <li>
                     <button id="connectWallet" class="wallet-button">
                         <img src="favicons/wallet-icon.png" alt="Wallet Icon" class="wallet-icon">
-                        Connect Wallet
+                        Connect
                     </button>
                 </li>                
             </ul>
@@ -64,96 +59,110 @@
     <!-- Main Content -->
     <div class="main-container">
 <body>
-  <div class="container">
-    <h2 class="bottom-one">Overview</h2>
-    <p class="bottom-three">PeerLay is a prediction game designed to prioritize user competition, fair rewards, and transparent gameplay. The game eliminates the need for intermediaries, empowering players to compete directly against one another. With its innovative scoring system, which values bold and strategic choices, PeerLay shifts the paradigm by rewarding overall performance relative to peers rather than just perfect predictions. </p>
+  <div class="guide-container" style="background-color: rgba(24, 116, 187, 0.24);">
+    <h2 class="bottom-one">PeerLay in Short</h2>
+    <p class="bottom-one">PeerLay is a prediction game that rewards players for making <b>better predictions</b> than the crowd.</p>
+    <p class="bottom-one"><b>Each week</b>, PeerLay offers a new game with a unique set of events, each event having 2 to 4 possible outcomes. </p>
+    <p class="bottom-one">The prediction phase (when you submit your predictions) lasts one week. The results phase (when events occur) also lasts one week. Prizes become available two days after the results phase ends.</p>
+    <p class="bottom-three">During the beta phase, <b>you can cast 3 free predictions per week, winning PeerLay tokens.</b></p>
+  </div>
 
-    <h2 class="bottom-one">What do I need to play?</h2>
-    <p class="bottom-one">- A Polygon-compatible web3 wallet. If you don't have one, we suggest downloading MetaMask.</p>
-    <p class="bottom-one">- Some POL to pay for gas fees.</p>
-    <p class="bottom-three">That's it. You will be able to cast 3 predictions per week that will win you PeerLay tokens.</p>
+  <div class="guide-container" style="background-color: rgba(24, 187, 184, 0.24);">
+    <h2 class="bottom-one">Market Probabilities</h2>
+    <p class="bottom-one">Scores are based on <b>final outcomes and market probabilities</b>. Probabilities are calculated based on the frequency of selection for each available option across all players. For example, if an option has been selected 60 times and there is a total of 200 valid predictions for the event, the probability will be equal to 30% or 0.3.</p>
+    <p class="bottom-three"><b>Only the probabilities at the end of the prediction phase matter.</b></p>
+  </div>
 
-    <h2 class="bottom-one">Game Structure</h2>
-    <p class="bottom-one">PeerLay is structured into weekly games. Each game features a unique set of events, with 3 to 6 events per game and 2 to 4 possible outcomes for each event</p>
-    <p class="bottom-three">Games are divided into two distinct phases, with each phase lasting one week.</p>
-    <strong class="bottom-one">Prediction Phase</strong> 
-    <p class="bottom-three">During this phase, lasting one week, players can participate by casting their predictions on the events of the weekly game. For each event, players can select up to one option less than the total available choices (i.e., selecting all options for an event is not allowed). Players may also opt to skip an event entirely. Players are free to withdraw any prediction they have placed for the current game throughout the entire Prediction Phase.</p>
-    <strong class="bottom-one">Results Phase</strong> 
-    <p class="bottom-three">In the following phase, lasting one week again, casting or canceling predictions is not possbile anymore. In this phase, the events unfold, and the outcomes are finalized. Two days after the end of the second week, players will be able to withdraw their rewards. The rewards will be calculated according to probabilities, representing the choices made by players as a group.</p>
-    <h2 class="bottom-one">Scoring System</h2>
-    <p class="bottom-three">Scores will be calculated depending on final outcomes and their associated probabilities.</p>
-    <strong class="bottom-one">Probabilities</strong> 
-    <p class="bottom-one">The probabilities are calculated based on the frequency of selection for each available option across all players. For example, if an option has been selected 60 times and there is a total of 200 valid predictions for the event, the probability will be equal to 30% or 0.3</p>
-    <p class="bottom-three">Probabilities will be defined only at the end of the prediction phase.</p>
-    <strong class="bottom-one">Score Calculation</strong>
-    <p class="bottom-one">Each prediction starts with a score equal to 1.</p> 
-    <p class="bottom-one">If a player selects the correct outcome for an event, their score is divided (thereby increasing it) by the sum of the probabilities of the options they selected.</p>
-    <p class="bottom-one">If the player's selected options do not include the correct outcome, their score is multiplied (thereby decreasing it) by the sum of the probabilities of the unselected options.</p>
-    <p class="bottom-three">If the event was skipped, the score stays unchanged.</p> 
+  <div class="guide-container" style="background-color: rgba(24, 187, 152, 0.24);">
+    <h2 class="bottom-one">Score Calculation</h2>
+    <p class="bottom-one">Each prediction <b>starts with a score of 1.</b></p>
+    <p class="bottom-one">If a player selects the correct outcome, their <b>score increases</b>: it is divided by the sum of the probabilities of the selected options.</p>
+    <p class="bottom-one">If the correct outcome is not among the player's selections, their <b>score decreases</b>: it is multiplied by the sum of the probabilities of the unselected options.</p>
+    <p class="bottom-three">If the event was skipped or ended with no final outcome, the score <b>stays unchanged.</b></p>
+  </div>
 
+  <div class="guide-container" style="background-color: rgba(24, 187, 184, 0.24);">
     <h2 class="bottom-one">Reward Calculation</h2>
     <p class="bottom-one">Rewards are determined by the player's Final Score.</p>
     <p class="bottom-three"><code>Reward = (Final Score × Total Prize) / Sum of Final Scores from All Players</code></p>
-
-    <h2 class="bottom-one">Example</h2>
-    <p class="bottom-one">We now see the case of a player placing a prediction on a game with 3 events.</p>
-    <p class="bottom-one">They choose options B and C for event 1, they skip event 2, and they select options A and C for event 3.</p>
-    <table class="bottom-one">
-      <thead>
-        <tr>
-          <th>Event</th>
-          <th colspan="4">Options</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Event 1</td>
-          <td>Option A (30%)</td>
-          <td class="selected">Option B (40%)</td>
-          <td class="selected">Option C (10%)</td>
-          <td>Option D (20%)</td>
-        </tr>
-        <tr>
-          <td>Event 2</td>
-          <td>Option A (50%)</td>
-          <td>Option B (20%)</td>
-          <td>Option C (30%)</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Event 3</td>
-          <td class="selected">Option A (10%)</td>
-          <td>Option B (80%)</td>
-          <td class="selected">Option C (10%)</td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p class="bottom-one">All 3 events resolve to option A for the sake of simplicity.</p>
-    <p class="bottom-one">The starting score is 1.</p>
-    <p class="bottom-one"><strong> Event 1 (wrong prediction):</strong> 1 × (0.3 + 0.2) = <strong>0.5</strong> (The partial score is multiplied by the sum of the multipliers of the not selected options since the correct outcome was not selected)</p>
-    <p class="bottom-one"><strong> Event 2 (event skipped):</strong> No change = <strong>0.5</strong> (The event was skipped by the player. no effect on the score)</p>
-    <p class="bottom-three"><strong> Event 3 (right prediction):</strong> 0.5 / (0.1 + 0.1) = <strong>2.5</strong> (The partial score is divided by the sum of the multipliers of the selected options since the correct outcome was selected)</p>
-
-    <p class="bottom-one">We consider a scenario in which the total available prize is 100 PeerLay tokens and the sum of the players' scores is 50.</p>
-    <p class="bottom-three"><code>Reward = (2.5 × 100) / 50 = 5 tokens</code></p>
   </div>
-  <div class="footer-text">
-    <p>
-        The website does not directly store personal data. However, third-party service providers may collect and process technical data, including IP addresses, as part of their operations.
-    </p>
-    <p>
-        For inquiries, contact us at <a href="mailto:contact@peerlay.com">peerlayprotocol@gmail.com</a>.
-    </p>
+
+  <div class="guide-container" style="background-color: rgba(24, 116, 187, 0.24);">
+    <h2 class="bottom-one">Example</h2>
+    <p class="bottom-three">Check the example below and make sure you understand the rules. The options underlined are the right answers for each event.</p>
+    <div id="event-container"></div>
+    <button id ="seeResults_btn" class="castPredictionButton">Simulate Prediction</button>
+    <div id="resultDisplay"></div>    
+  </div>
+
+  <div class="guide-container" style="background-color: rgba(24, 187, 184, 0.24);">
+    <h2 class="bottom-one">Roadmap</h2>
+    <p class="bottom-one"><b>Phase 1:</b> Public beta version with free predictions.</p>
+    <p class="bottom-one"><b>Phase 2:</b> Introducing the ability to vote on which events will be part of the weekly games, using PeerLay tokens.</p>
+    <p class="bottom-one"><b>Phase 3:</b> Launch of the beta mini app on Farcaster/Warpcast.</p>
+    <p class="bottom-three"><b>Phase 4:</b> Official launch, with predictions using USDC and PeerLay tokens as a governance tool, along with earning 1% of the USDC played.</p>
+</div>
 </div>
 <div id="customAlert" class="custom-alert">
     <div class="custom-alert-content">
         <h3 id="alertMessage">This is a custom alert</h3>
     </div>
 </div>
+<footer class="footer">
+    <li style="display: flex; flex-direction: column; align-items: center; position: relative;">
+        <div class="header-icons">
+            <a href="https://warpcast.com/peerlay">
+                <img src="favicons/warpcast-logo.png" alt="Warpcast Icon" class="header-icon">
+            </a>
+            <a href="https://github.com/PeerLayProtocol/PeerLayBeta">
+                <img src="favicons/github-icon.png" alt="GitHub Icon" class="header-icon">
+            </a>
+            <a href="https://basescan.org/address/0x4e3977c1e5559c5c6387c971de4e14eB50CB526E">
+                <img src="favicons/base-logo.png" alt="Base Icon" class="header-icon">
+            </a>
+        </div>
+    </li> 
+    <div class="inner">
+        <div class="column is-logo">
+            <a class="main-logo">
+                <div class="logo">
+                    <img src="favicons/PeerLay-logo.png" alt="PeerLay Logo" class="logo-image">
+                </div>
+                <div class=".logo-image">
+                    <h2 class="logo-text"> PeerLay</h2> 
+                    <span class="copyright">© 2025. All rights reserved.</span>
+                </div>
+            </a>
+        </div>
+        <div class="column is-nav">
+            <div class="column-title">Navigation</div>
+            <ul>
+                <li><a href="index.html" class="Wtext">Play</a></li>
+                <li><a href="how-to-play.html" class="Wtext">Rules of the Game</a></li>
+                <li><a href="account.html" class="Wtext">Account Page</a></li>
+            </ul>
+        </div>
+
+        <div class="column is-nav">
+            <div class="column-title">Contact</div>
+            <ul>
+                <li><a href="mailto:peerlayprotocol@gmail.com" class="Wtext"><i></i> peerlayprotocol@gmail.com</a></li>
+                <li><a href="https://warpcast.com/peerlay" class="Wtext"><i></i>Warpcast</a></li>
+            </ul>
+        </div>
+
+        <div class="column is-nav">
+            <div class="column-title">Other Links</div>
+            <ul>
+                <li><a href="https://github.com/PeerLayProtocol/PeerLayBeta" class="Wtext">GitHub</a></li>
+                <li><a href="https://basescan.org/address/0x4e3977c1e5559c5c6387c971de4e14eB50CB526E" class="Wtext">Contract Address</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
   
   <!-- Include external JS script -->
   <script src="common_script.js"></script>
+  <script src="guide_script.js"></script>
 </body>
 </html>

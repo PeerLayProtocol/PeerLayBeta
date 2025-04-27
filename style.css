@@ -12,13 +12,143 @@
     --c1: #0a2243;
     --c2: #edddc3; 
     --c3: #0000; 
+    --c4: #307696ed;
+    --c5: rgba(18, 20, 110, 0.8);
+    --c6: #1a416eed;
     --c7: #f3f7f0; /* Text*/
-    --c10: #2a8f9a;
-    --c11: #06858c; /* See more link */
-    --c13: #18567a; /* Vote container*/
-    --c15: #073b31; /* Backgorund 2 */
-    --s: 5px;    /* Background pattern size */
+    --c8: #c6d9e043;
+    --c9: rgba(18, 55, 103, 0.4);
+    --c10: #46adb9;
+    --c11: #1395acb2;
+    --c12: #143a72;
+    --c13: #4a8fb7; /* Vote container*/
+    --c14: #1199b1ee;
+    --c15: #42536a; /* Background 2 */
+    --c16: rgb(48, 77, 114);
+    --c17: rgba(18, 20, 110, 0.3);
+    --s: 9px;    /* Background pattern size */
 }
+
+.spinner {
+    animation: spin 1.2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }  
+
+  /* Container for each event */
+  .event-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    background-color: rgba(24, 171, 187, 0.24);
+}
+
+.event-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    background-image: url('favicons/noise2.png');
+    opacity: 0.08; /* Reduce opacity of the image */
+    z-index: -1; /* Place the image behind the content */
+}
+
+.guide-container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px 10px 20px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    background-color: rgba(24, 187, 143, 0.24);
+}
+
+.guide-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    background-image: url('favicons/noise2.png');
+    opacity: 0.08; /* Reduce opacity of the image */
+    z-index: -1; /* Place the image behind the content */
+}
+
+.loading-banner {
+    height: 300px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* horizontally center children */
+    justify-content: center;
+    padding: 4px;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 15px;
+    border-radius: 24px;
+    background-color: rgba(24, 171, 187, 0.15);
+}
+
+.loading-banner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 24px;
+    background-image: url('favicons/noise2.png');
+    opacity: 0.06; /* Reduce opacity of the image */
+    z-index: -1; /* Place the image behind the content */
+}
+
+.rotating-logo {
+    width: 90px; /* Adjust size as needed */
+    height: auto;
+    animation: spin 1.5s linear infinite;
+    margin-bottom: 15px;
+}
+
+/* Event content wrapper, positioning description and options horizontally */
+.event-content {
+    display: flex;
+    justify-content: space-between; /* Spread the description and options */
+    gap: 20px; /* Add space between description and options */
+}
+
+.event-description {
+    position: relative;
+    padding-top: 60px;
+    padding-bottom: 50px;
+    padding-left: 15px;
+    padding-right: 20px;
+    display: flex;
+    align-items: center; /* Centers text vertically */
+    justify-content: center;
+}
+
+.event-options {
+    display: flex;                /* Use flexbox to align items */
+    flex-direction: column;       /* Stack options vertically */
+    justify-content: center;      /* Vertically center the options */
+    min-width: 25%;
+    margin-top: 6px;      
+    margin-bottom: 6px;
+    margin-right: 4px;         
+}
+
 
 ul {
     list-style: none;
@@ -37,13 +167,13 @@ a {
 }
 
 header {
-    background-color: rgba(2, 43, 58, 0.8);
+    background-color: var(--c9);
     border-bottom: 2px solid var(--c2);
 }
 
 header .navbar {
     display: flex;
-    padding: 20px;
+    padding: 25px 30px;
     align-items: center;
     justify-content: space-between;
 }
@@ -65,7 +195,6 @@ header .navbar {
     padding: 10px 4px;
     color: var(--c7);
     font-size: 20px;
-    text-transform: uppercase;
     border-radius: 30px;
     transition: 0.3s ease;
 }
@@ -87,20 +216,26 @@ header .navbar {
 }
 
 .logo-image {
-    width: 60px; /* Adjust size as needed */
+    width: 56px; /* Adjust size as needed */
     height: auto;
-    margin-right: 5px; /* Add some spacing between the logo and the text */
+    margin-right: 8px; /* Add some spacing between the logo and the text */
 }
 
 .menu-icon{
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
+}
+
+.nav-icon {
+    width: 18px; /* Adjust icon size */
+    height: 16px;
+    padding-right: 2px;
 }
 
 .wallet-icon {
     flex-shrink: 0;
-    width: 30px; /* Adjust icon size */
-    height: 30px;
+    width: 32px; /* Adjust icon size */
+    height: 32px;
 }
 
 .header-icons {
@@ -108,6 +243,7 @@ header .navbar {
     gap: 15px; /* Add spacing between the icons */
     justify-content: flex-end; /* Align icons to the right */
     width: 100%; /* Ensure the icons span the entire header space */
+    margin-bottom: 12px;
 }
 
 .header-icon {
@@ -121,16 +257,15 @@ header .navbar {
     gap: 8px; /* Space between icon and text */
     padding: 10px 12px;
     font-size: 1rem;
-    background-color: var(--c11); /* Button background color */
+    background-color: var(--c14); /* Button background color */
     color: #fff;
     border-radius: 20px;
-    max-width: 250px;
+    max-width: 220px;
     max-height: 50px;
     overflow: hidden; /* Hide overflow */
     cursor: pointer;
     white-space: nowrap; /* Prevent text from wrapping */
     text-overflow: ellipsis; /* Add ellipsis for long text */
-    margin-left: 18px;
 }
 
 body.show-mobile-menu .navbar .nav-menu{
@@ -138,9 +273,9 @@ body.show-mobile-menu .navbar .nav-menu{
 }
 
 body {
-    background: linear-gradient(135deg, #060606, #011c1b);
-    filter: contrast(150%) brightness(90%);
-    font-size: 1.1em;
+    background: linear-gradient(160deg, #08244f, #0b6e8c);
+    filter: contrast(150%) brightness(95%);
+    font-size: 1.05em;
     color: var(--c7);
   }
   
@@ -151,24 +286,32 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('favicons/noise.png');
+  --c:#333 20% 30%;
+  background:
+    linear-gradient(135deg,#0000 20%,var(--c),#0000 0),
+    repeating-linear-gradient(45deg,var(--c),var(--c12) 0 70%);
+  background-size: var(--s) var(--s);
     mix-blend-mode: soft-light;
     pointer-events: none;
-    opacity: 0.3;
+    opacity: 0.06;
+  }
+
+  .timeDisplay{
+    font-size: 14px;
   }
 
   button {
-    padding: 10px 20px;
-    background-color: var(--c3);
+    padding: 9px 18px;
+    background-color: rgba(127, 129, 157, 0.15);
     color: var(--c7);
     border-color: var(--c7);
+    border-width: 1px;
     border-radius: 12px;
     cursor: pointer;
     font-size: 12px;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     margin: 10px 2px; /* Added 15px for left and right margins */
     max-width: 250px;
@@ -179,7 +322,7 @@ body {
 }
 
 button:hover {
-    filter: brightness(1.2); /* Slightly increase brightness on hover */
+    filter: brightness(1.05); /* Slightly increase brightness on hover */
     transform: scale(1.03); /* Slight zoom on hover */
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
 }
@@ -190,88 +333,192 @@ button.active {
     border-bottom: 3px solid var(--c2); 
 }
 
-.skip-option {
-    grid-column: span 2; /* Makes it take up one row across two columns */
-    justify-self: end; /* Align it to the right */
+.castPredictionButton {
+    font-size: 16px;
+    background-color: var(--c14);
+    background-image: linear-gradient(rgba(20, 99, 120, 0.9), rgba(20, 104, 123, 0.7));
+    margin-top: 10px;
+}
+
+.arrowButtonLeft {
+    background-image: url('favicons/arrow-small-left.png'); 
+    border: none;
+    padding: 20px 18px;
     background-color: var(--c3);
-    border: 2px solid var(--c7); 
-    border-radius: 12px;
-    max-height: 4em; /* Smaller height than other options */
-    padding: 6px 12px; /* Reduced padding */
-    font-weight: bold; /* Make the text stand out */
+    border-color: var(--c3);
+    box-shadow: var(--c3);
+    margin: 0px;
+}
+
+.arrowButtonRight {
+    background-image: url('favicons/arrow-small-right.png');
+    border: none;
+    padding: 20px 18px;
+    background-color: var(--c3);
+    border-color: var(--c3);
+    box-shadow: var(--c3);
+    margin: 0px;
+}
+
+.arrowButtonLeftPastGames {
+    background-image: url('favicons/arrow-small-left.png'); 
+    border: none;
+    padding: 16px 16px;
+    background-color: var(--c3);
+    border-color: var(--c3);
+    box-shadow: var(--c3);
+    margin: 0px;
+}
+
+.arrowButtonRightPastGames {
+    background-image: url('favicons/arrow-small-right.png');
+    border: none;
+    padding: 16px 16px;
+    background-color: var(--c3);
+    border-color: var(--c3);
+    box-shadow: var(--c3);
+    margin: 0px;
+}
+
+.skip-option {
+    position: absolute;
+    top: 6px;
+    left: 15px;
+    background-color:#0d5c7889;
+    border: 1px solid var(--c8); 
+    border-radius: 8px;
+    max-height: 3em; /* Smaller height than other options */
+    padding: 6px 10px; /* Reduced padding */
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer; /* Keeps the pointer behavior consistent */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
+    margin-top: 2px;
+}
+
+.skip-option:hover{
+    transform: scale(1.05);
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+.option-percentage{
+    font-size: 14px;
+    font-weight: 425;
+}
+
+.optionPlusPercentage {
+    display: grid;
+    grid-template-columns: 45px 1fr; /* Set a fixed width for the percentage column (50px) and the remaining space for the option text */
+    gap: 1px; /* Optional: Space between the columns */
+    align-items: center; /* Vertically center the content */
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 table {
+    position: relative;
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 4px; /* Add spacing between rows */
-    background-color: var(--c3);
+    border-spacing: 0 2px;
     color: var(--c7);
+    overflow: hidden; 
 }
 
+table::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url('favicons/noise2.png');
+    background-repeat: repeat;
+    opacity: 0.09; 
+    pointer-events: none; 
+    z-index: 0; 
+}
+
+table > * {
+    position: relative;
+    z-index: 1; /* Bring actual table content above the noise */
+}
+
+
 table, th, td {
-    border: none; /* Remove default borders */
-    padding: 6px;
     text-align: center;
 }
 
 /* Styling for table headers */
 table th {
-    background-color: rgba(18, 137, 173, 0.247);
+    background-color: rgba(18, 137, 173, 0.6);
     color: var(--c7); /* Text color for header */
     font-weight: 600;
     font-size: 1.1em;
-    text-transform: uppercase;
+    min-width: 35px;
 }
 
 /* Styling for table cells with left and right borders */
 table td {
-    max-width: 500px;
+    max-width: 600px;
+    border-top-style: ridge;
+    border-width: 3px;
+    border-color: rgba(15, 204, 217, 0.45);
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
-    background-color: rgba(22, 127, 192, 0.2);
+    background-color: rgba(6, 104, 164, 0.3);
     text-align: center;
 }
 
 /* Alternate row coloring */
 table tr:nth-child(even) td {
-    background-color: rgba(11, 88, 136, 0.2);
+    background-color: rgba(22, 135, 192, 0.3);
 }
 
-/* Enhanced outcomes-cell styling */
-.outcomes-cell {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    max-width: 100%;
-    overflow-wrap: break-word;
+table {
+    border-collapse: separate; /* Allows border-radius */
+    border-spacing: 0; /* Ensures no gaps between cells */
+    overflow: hidden;
+    border-radius: 8px; /* Rounds all four corners */
+    border: 1px solid rgba(224, 228, 237, 0.35); /* Adds a visible border */
 }
 
-.outcomes-cell.three-options .outcome-option:nth-child(4){
-    grid-column: 1 / span 2; /* Center the third item across two columns */
-    justify-self: center; /* Ensure it's centered horizontally */
-    text-align: center; /* Center text inside */
-    width: 43%; /* Same width as other items */
+tr:not(:has(th)) {
+    height: 70px;
 }
+
+.column-padding {
+    position: relative;
+    padding-top: 60px;
+    padding-right: 40px; /* Adjust padding as needed */
+    padding-left: 30px;
+    padding-bottom: 50px;
+  }
+
+  .column-padding2 {
+    padding-right: 10px; /* Adjust padding as needed */
+  }
 
 /* Outcome option styling */
 .outcome-option {
+    display: flex;
     max-height: 6em;
     overflow-y: auto;
-    padding: 9px;
-    border: 1px solid var(--c7); 
+    padding: 8px;
+    border: 1px solid var(--c8); 
     border-radius: 8px;
-    background-color: rgba(3, 47, 60, 0.3);
+    background-color: rgba(19, 93, 114, 0.6);
     color: var(--c7);
     font-size: 16px;
     word-wrap: break-word;
     white-space: normal;
     transition: background-color 0.3s ease, transform 0.2s ease;
     align-items: center;
-    gap: 8px;
+    margin: 3px 0px;
+    min-height: 35px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .outcome-option:hover {
@@ -280,10 +527,8 @@ table tr:nth-child(even) td {
 
 /* Styling for selected options */
 .selected {
-    background-color: var(--c10);
+    background-color: var(--c14);
     color: var(--c7);
-    border: 1px solid var(--c2);
-    font-weight: 600;
 }
 
 .right {
@@ -312,7 +557,7 @@ table tr:nth-child(even) td {
 .see-more-link {
     display: block;
     margin-top: 8px;
-    color: var(--c11); /* Aqua color for the link */
+    color: var(--c14); /* Aqua color for the link */
     cursor: pointer;
     font-size: 14px;
     text-align: left;
@@ -321,13 +566,53 @@ table tr:nth-child(even) td {
 }
 
 .see-more-link:hover {
-    color: var(--c11);
+    color: var(--c14);
     text-decoration: underline;
 }
 
 .see-more-link:focus {
     outline-offset: 2px;
 }
+
+.whitelist-status-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+  }
+  
+  .whitelist-status {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-right: 8px;
+    font-weight: 600;
+    border: 1px solid var(--c2);
+    cursor: default;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    display: inline-block;
+    background-color: var(--c17);
+    color: var(--c7);
+  }
+
+  .whitelist-section{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    margin-top: 40px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--c2);
+    cursor: default;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    display: inline-block;
+    background-color: var(--c17);
+    color: var(--c7);
+    margin-left: 50px;
+    margin-right: 50px;
+    padding-top: 15px;
+    font-size: 14px;
+  }
 
 /* Modal styling */
 .modal {
@@ -347,9 +632,8 @@ table tr:nth-child(even) td {
     margin: 5% auto;             /* Reduce margin for more height */
     padding: 20px;
     border: 1px solid var(--c2);
-    width: 90%;                  /* Increase the base width */
+    width: 85%;                  /* Increase the base width */
     max-width: 800px;            /* Increase max width */
-    max-height: 90vh;            /* Increase max height to fill more of the viewport */
     overflow-y: auto;            /* Enable vertical scrolling */
     overflow-x: hidden;          /* Prevent horizontal overflow */
     box-sizing: border-box;
@@ -383,10 +667,42 @@ table tr:nth-child(even) td {
     cursor: pointer;
 }
 
+.down{
+    padding-top: 20px;
+}
+
 .tab-nav {
     display: flex;
-    margin-bottom: 10px;
-}
+    justify-content: center; /* Center horizontally */
+    gap: 0px; /* Space between buttons */
+    padding: 0px;
+    border-radius: 8px; /* Slight rounding for aesthetics */
+  }
+  
+  .tab-nav button {
+    padding: 10px 20px;
+    font-size: 12px;
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 15px;
+  }
+
+  .tab-nav2 {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    gap: 0px; /* Space between buttons */
+    padding: 0px;
+    border-radius: 8px; /* Slight rounding for aesthetics */
+  }
+  
+  .tab-nav2 button {
+    background-color: var(--c13);
+    padding: 10px 20px;
+    font-size: 12px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 25px;
+  }
 
 .tab-content {
     display: none;
@@ -396,8 +712,7 @@ table tr:nth-child(even) td {
     display: block;
 }
 
-/* Default hidden state for overflowed text */
-.outcome-option .extra-text {
+.extra-text {
     display: none; /* Hide extra text initially */
 }
 
@@ -421,13 +736,11 @@ input[type="text"] {
 }
 
 .main-container {
-    width: 100%;
-    max-width: 1400px;
-    margin: 20px auto;          /* Center the container and add spacing */
-    padding: 20px;              /* Add internal padding */
-    border-radius: 8px;         /* Rounded corners for a modern look */
+    width: 85%;
+    margin: 8px auto;          /* Center the container and add spacing */
+    padding: 15px;              /* Add internal padding */
     box-sizing: border-box;
-    padding-bottom: 50px;
+    padding-bottom: 25px;
 }
 
 /* Toggle container */
@@ -479,7 +792,7 @@ input[type="text"] {
 
 /* When the checkbox is checked */
 .toggle-container input:checked + .slider {
-    background-color: var(--c11); /* Vibrant purple for active state */
+    background-color: var(--c14); /* Vibrant purple for active state */
 }
 
 .toggle-container input:checked + .slider:before {
@@ -488,8 +801,7 @@ input[type="text"] {
 
 /* Text next to the slider */
 .toggle-text {
-    font-family: "Montserrat", sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     color: #eaeaea; /* Light text color */
 }
@@ -498,7 +810,8 @@ input[type="text"] {
     display: flex; /* Create a horizontal layout for child elements */
     justify-content: space-between; /* Push left and right sections apart */
     align-items: center; /* Vertically center items */
-    padding: 10px 20px; /* Add some padding for spacing */
+    padding: 15px 20px; /* Add some padding for spacing */
+    padding-top: 5px;
 }
 
 .left-info {
@@ -506,11 +819,19 @@ input[type="text"] {
 }
 
 .right-info {
-    text-align: right; /* Align text to the right */
+    text-align: end; /* Align text to the right */
     display: flex; /* Use flex for alignment */
-    flex-direction: column; /* Stack items vertically */
-    align-items: flex-end; /* Align items to the right */
-    gap: 10px; /* Add space between the time display and toggle */
+}
+
+.align-right {
+    display: block;
+    margin-left: auto; /* Pushes button to the right */
+}
+
+.right-info2 {
+    position: absolute;
+    right: 40px; /* Align to the right edge of the parent container */
+    top: 155px; /* Vertically center the element */
 }
 
 .selectable {
@@ -542,7 +863,7 @@ input[type="text"] {
 }
 
 .custom-alert-content {
-    background-color: var(--c1);
+    background-color: var(--c6);
     margin: auto;
     padding: 10px;
     border: 1px solid var(--c10);
@@ -559,10 +880,199 @@ input[type="text"] {
     font-size: 14px;
 }
 
-@media screen and (max-width: 950px) {
+#gamePrizeDisplay {
+    display: none;
+}
+
+.Wtext {
+    color: rgb(213, 228, 244);
+    font-size: 14px;
+    padding: 2px;
+}
+
+.footer {
+    display: block;
+    width: 100%;
+    position: relative;
+    background: var(--c17);
+    padding: 30px 50px 40px 50px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-top: 1px solid var(--c2);
+}
+
+.footer .inner {
+    display: flex;
+    align-items: self-start;
+    justify-content: space-between;
+    column-gap: 20px;
+    row-gap: 20px;
+    margin: auto;
+    text-align: left;
+}
+.main-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.main-logo .logo {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+.main-logo .logo > img {
+    display: block;
+    width: 100%;
+    min-width: 40px;
+}
+.logo-info {
+    text-align: left;
+    line-height: 20px;
+}
+.text {
+    font-size: 17px;
+    line-height: 17px;
+    color: #fff;
+    letter-spacing: .18em;
+    font-weight: 600;
+}
+
+.copyright {
+    color: #fff;
+    font-size: 12px;
+    line-height: 12px;
+}
+.footer .column {
+    width: 100%;
+    font-size: 14px;
+    text-align: left;
+}
+.footer .column .column-title {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 0.5em;
+    color: #fff;
+}
+.footer .column .column-title:not(:first-child) {
+    margin-top: 1em;
+}
+
+
+@media screen and (max-width: 980px) {
+
+    .whitelist-section{
+        margin-top: 25px;
+        margin-left: 5px;
+        margin-right: 5px;
+        padding-top: 10px;
+        font-size: 12px;
+      }
+
+    .timeDisplay{
+        font-size: 12px;
+      }
+
+    .option-percentage{
+        font-size: 12px;
+    }
+
+    .skip-option:hover{
+        transform: scale(1.00);
+        box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    }
+
+    .event-options {
+        min-width: 35%;      
+    }
+
+    .event-description {
+        padding-top: 50px;
+        padding-bottom: 40px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .optionPlusPercentage {
+        display: grid;
+        grid-template-columns: 38px 1fr; /* Set a fixed width for the percentage column (50px) and the remaining space for the option text */
+        gap: 2px; /* Optional: Space between the columns */
+        align-items: center; /* Vertically center the content */
+    }
+
+    .loading-banner {
+        font-size: 16px;
+    }
+    .main-container {
+        width: 97.5%;
+    }
+
+    tr:not(:has(th)) {
+        height: 65px;
+    }
+
+    .outcome-option:hover {
+        transform: scale(1.00);
+    }
+
+    table td {
+        max-width: 300px;
+    }
+
+    button {
+        padding: 6px 12px;
+        letter-spacing: 0.2px;
+        margin: 6px 2px; /* Added 15px for left and right margins */
+        max-width: 200px;
+        border-radius: 8px;
+    }
+
+    .castPredictionButton {
+        font-size: 14px;
+        padding: 8px 12px;
+        margin-top: 10px;
+    }
+
+    .skip-option {
+        left: 10px;
+        border-radius: 8px;
+        max-height: 3em; /* Smaller height than other options */
+        padding: 5px 10px; /* Reduced padding */
+        font-size: 12px;
+    }
+
+    .column-padding {
+        padding-right: 20px; /* Adjust padding as needed */
+        padding-left: 10px;
+        padding-top: 45px;
+        padding-bottom: 45px;
+      }
+    
+      .column-padding2 {
+        padding-right: 5px; /* Adjust padding as needed */
+      }
+
+      .right-info2 {
+        right: 20px; /* Align to the right edge of the parent container */
+        top: 155px; /* Vertically center the element */
+    }
+
+      header .navbar {
+        padding: 25px 18px;
+    }
+
+      .game-info {
+        padding-top: 0px;
+        padding-right: 10px;
+        padding-left: 10px;
+        padding-bottom: 10px;
+    }
+
     .navbar :where(#menu-close-button, #menu-open-button) {
         display: block;
         font-size: 18px;
+        justify-content: center;
+        align-items: center;
     }
 
     .navbar #menu-close-button{
@@ -582,10 +1092,11 @@ input[type="text"] {
         flex-direction: column;
         align-items: center;
         padding-top: 100px;
-        background: var(--c1);
-        transition: left 0.2 ease;
+        background: var(--c16);
+        transition: left 0.35s ease-in-out;
         z-index: 1000;
         justify-content: flex-start;
+        border-right: 2px solid var(--c2);
     }
 
     .navbar .nav-menu .nav-link{
@@ -594,15 +1105,10 @@ input[type="text"] {
         margin-top: 17px;
     }
 
-    .outcomes-cell {
-        display: block; /* Change display to block for mobile */
-        gap: 8px; /* Adjust gap to a smaller value if needed */
-    }
-
-    .outcomes-cell.three-options .outcome-option:nth-child(4) {
-        grid-column: unset; /* Remove grid positioning */
-        justify-self: unset; /* Reset horizontal alignment */
-        width: auto; /* Reset the width to fit content */
+    .outcome-option {
+        padding: 4px;
+        font-size: 12px;
+        margin: 3px 0px;
     }
 
     .header-icons {
@@ -624,15 +1130,29 @@ input[type="text"] {
         font-size: 15px;
     }
 
-    .outcome-option {
-        font-size: 12px;
-    }
-
     .footer-text p {
         font-size: 9px;
     }
 
     table th {
         font-size: 14px;
+    }
+    
+    .footer .inner {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    footer.footer {
+        padding-top: 20px;
+    }
+    .column.is-logo {
+        order: 4;
+    }
+    .tab-nav button {
+        font-size: 9px;
+      }
+
+      .toggle-text {
+        font-size: 10px;
     }
 }
